@@ -11,4 +11,4 @@ services:
     env: node
     root: .
     buildCommand: cd Client && npm install && npm run build
-    startCommand: cd Client && npm start
+    startCommand: cd Client && npm run preview -- --host 0.0.0.0 --port $PORT
