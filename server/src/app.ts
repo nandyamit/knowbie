@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import cors from 'cors';
 import { authRoutes } from './routes/auth';
 import { sequelize } from './config/database';
@@ -8,17 +9,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
- res.json({ message: 'Server is running' });
-});
+// API routes
+app.use('/api/auth', authRoutes);
 
-// Mount auth routes at root level
-app.use('/', authRoutes);
+// Serve static files
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+// Handle React routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 
 sequelize.sync().then(() => {
- app.listen(PORT, () => {
-   console.log(`Server running on port ${PORT}`);
- });
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 });

@@ -1,36 +1,8 @@
 services:
   - type: web
-    name: knowbie-server
+    name: knowbie
     env: node
-    root: .
-    buildCommand: cd server && npm install && npm run build
+    buildCommand: |
+      cd client && npm install && npm run build && \
+      cd ../server && npm install && npm run build
     startCommand: cd server && npm start
-    envVars:
-     - key: DB_NAME
-       value: knowbie
-     - key: DB_USER
-       fromDatabase:
-         name: knowbie-db
-         property: user
-     - key: DB_PASSWORD
-       fromDatabase:
-         name: knowbie-db
-         property: password
-     - key: DB_HOST
-       fromDatabase:
-         name: knowbie-db
-         property: host
-     - key: NODE_ENV
-       value: production
-     - key: JWT_SECRET
-       value: "2f7b2e3a9c8d4f6e1m5n0p7q4r8t2v5w9x3y6z"
-
-  - type: web
-    name: knowbie-client
-    env: node
-    root: .
-    buildCommand: cd client && npm install && npm run build
-    startCommand: cd client && npm run preview -- --host 0.0.0.0 --port $PORT
-    envVars:
-    - key: VITE_API_URL
-    value: "https://knowbie-server.onrender.com"
