@@ -2,6 +2,7 @@ services:
   - type: web
     name: knowbie-server
     env: node
+    root: .
     buildCommand: cd server && npm install && npm run build
     startCommand: cd server && npm start
     envVars:
@@ -23,6 +24,7 @@ services:
   - type: web
     name: knowbie-client
     env: node
+    root: .
     buildCommand: cd client && npm install && npm run build
     startCommand: cd client && npm start
 
