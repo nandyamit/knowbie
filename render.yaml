@@ -3,31 +3,12 @@ services:
     name: knowbie-server
     env: node
     root: .
-    buildCommand: cd server && npm install && npm run build
-    startCommand: cd server && npm start
-    envVars:
-      - key: DB_NAME
-        value: knowbie
-      - key: DB_USER
-        fromDatabase:
-          name: knowbie-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: knowbie-db
-          property: password
-      - key: DB_HOST
-        fromDatabase:
-          name: knowbie-db
-          property: host
+    buildCommand: cd Server && npm install && npm run build
+    startCommand: cd Server && npm start
 
   - type: web
     name: knowbie-client
     env: node
     root: .
-    buildCommand: cd client && npm install && npm run build
-    startCommand: cd client && npm start
-
-databases:
-  - name: knowbie-db
-    plan: free
+    buildCommand: cd Client && npm install && npm run build
+    startCommand: cd Client && npm start
