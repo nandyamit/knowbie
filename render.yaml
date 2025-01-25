@@ -1,9 +1,14 @@
-services:
-  - type: web
-    name: knowbie-client
-    env: static
-    buildCommand: cd Client && npm install && npm run build
-    staticPublishPath: Client/dist
-    envVars:
-      - key: VITE_API_URL
-        value: "https://knowbie-server.onrender.com"
+- type: web
+  name: knowbie-client
+  env: static
+  buildCommand: cd Client && npm install && npm run build
+  staticPublishPath: Client/dist
+  headers:
+    - source: "**"
+      headers:
+        - key: "Access-Control-Allow-Origin"
+          value: "*"
+  routes:
+    - type: rewrite
+      source: /*
+      destination: /index.html
