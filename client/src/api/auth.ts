@@ -1,29 +1,30 @@
-interface LoginCredentials {
-  email: string;
+import axios from 'axios';
+
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+interface LoginInput {
+  username: string;
   password: string;
- }
- 
- interface RegisterData {
+}
+
+interface RegisterInput {
   username: string;
   email: string;
   password: string;
- }
- 
- import axios from 'axios';
- 
- const API_URL = import.meta.env.VITE_API_URL;
- 
- export const authApi = {
-  login: async (credentials: LoginCredentials) => {
-    const response = await axios.post(`${API_URL}/auth/login`, credentials);
+}
+
+export const authApi = {
+  login: async (data: LoginInput) => {
+    const response = await axios.post(`${API_URL}/auth/login`, data);
     return response.data;
   },
- 
-  register: async (data: RegisterData) => {
+
+  register: async (data: RegisterInput) => {
     const response = await axios.post(`${API_URL}/auth/register`, data);
     return response.data;
   },
- 
+
   getCurrentUser: async () => {
     const token = localStorage.getItem('token');
     if (!token) return null;
@@ -33,4 +34,4 @@ interface LoginCredentials {
     });
     return response.data;
   }
- };
+};
