@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { LandingPage } from './pages/LandingPage';
 import { LoginForm } from './components/auth/LoginForm';
 import { SignupForm } from './components/auth/SignupForm';
-import { DashboardPage } from './pages/Dashboard';
+import { Dashboard } from './pages/Dashboard';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
        <Route path="/" element={!user ? <LandingPage /> : <Navigate to="/dashboard" />} />
        <Route path="/login" element={!user ? <LoginForm /> : <Navigate to="/dashboard" />} />
        <Route path="/signup" element={!user ? <SignupForm /> : <Navigate to="/dashboard" />} />
-       <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
+       <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
      </Routes>
    </Router>
  );
