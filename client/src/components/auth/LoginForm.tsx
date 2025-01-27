@@ -16,8 +16,9 @@ export const LoginForm = () => {
     try {
       await login(formData.username, formData.password);
       navigate('/dashboard');
-    } catch (err) {
-      setError('Invalid username or password');
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Invalid credentials');
+      console.error('Login error:', err.response?.data);
     }
   };
 

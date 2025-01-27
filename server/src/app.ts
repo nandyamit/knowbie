@@ -11,7 +11,10 @@ app.use(cors());
 app.use(express.json());
 
 // API routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', (req, res, next) => {
+  console.log('Auth route hit:', req.method, req.path);
+  next();
+}, authRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../../client/dist')));

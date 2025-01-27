@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { authApi } from '../api/auth';
 
+
 type AuthContextType = {
   user: any | null;
   loading: boolean;
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
+    
   
     const value = {
       user,
@@ -31,6 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem('token');
         setUser(null);
         setLoading(false);
+        window.location.href = '/';
       }
     };
   

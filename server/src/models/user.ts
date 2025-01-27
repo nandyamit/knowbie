@@ -1,4 +1,3 @@
-// models/user.ts
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
 import bcrypt from 'bcrypt';
@@ -19,35 +18,18 @@ User.init({
   username: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
-    validate: {
-      notEmpty: true
-    }
+    unique: true
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true
-    }
+    unique: true
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      len: [8, 100]
-    }
+    allowNull: false
   }
 }, {
   sequelize,
-  modelName: 'User',
-  hooks: {
-    beforeCreate: async (user) => {
-      if (user.changed('password')) {
-        user.password = await bcrypt.hash(user.password, 10);
-      }
-    }
-  }
+  modelName: 'User'
 });
-

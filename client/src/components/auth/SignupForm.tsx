@@ -31,15 +31,22 @@ export const SignupForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     try {
-      await authApi.register(formData);
+      console.log('Submitting registration:', formData);
+      const response = await authApi.register(formData);
+      console.log('Registration response:', response);
       navigate('/login');
     } catch (err: any) {
+      console.error('Full registration error:', err);
+      console.error('Error response:', err.response?.data);
+      
       if (err.response?.data?.error === 'Username already exists') {
         setErrors({ username: 'Username taken' });
       } else if (err.response?.data?.error === 'Email already exists') {
         setErrors({ email: 'Email already registered' });
+      } else {
+        setErrors({ username: 'Registration failed' });
       }
     }
   };
