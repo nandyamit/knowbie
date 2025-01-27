@@ -9,6 +9,10 @@
         "build": "cd server && npm run build && cd ../client && npm run build"
     },
     "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
+        "@types/jsonwebtoken": "^9.0.8",
         "@types/node": "^22.10.10",
         "concurrently": "^8.2.2"
     },
