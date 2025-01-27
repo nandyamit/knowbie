@@ -1,20 +1,22 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { authController } from '../controllers/auth';
 import { authMiddleware } from '../middleware/auth';
 import { User } from '../models/user';
 
 const router = Router();
 
-router.post('/register', (req, res) => {
+router.post('/register', (req: Request, res: Response) => {
   console.log('Register route hit', req.body);
   authController.register(req, res);
 });
 
-router.post('/login', authController.login);
+router.post('/login', (req: Request, res: Response) => {
+  authController.login(req, res);
+});
 
-router.get('/validate-token', authMiddleware, async (req, res) => {
+router.get('/validate-token', authMiddleware, async (req: Request, res: Response) => {
   try {
-    const user = await User.findByPk(req.user.userId);
+    const user = await User.findByPk(req.user?.userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -24,9 +26,9 @@ router.get('/validate-token', authMiddleware, async (req, res) => {
   }
 });
 
-router.get('/me', authMiddleware, async (req, res) => {
+router.get('/me', authMiddleware, async (req: Request, res: Response) => {
   try {
-    const user = await User.findByPk(req.user.userId);
+    const user = await User.findByPk(req.user?.userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
