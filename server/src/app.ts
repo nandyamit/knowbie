@@ -7,32 +7,12 @@ import { User } from './models/user';
 
 const app = express();
 
-// Determine the allowed origins based on environment
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? ['https://knowbie.onrender.com']  // Production origin
-  : ['http://localhost:3000', 'http://localhost:5173'];  // Local development origins
-
-const corsOptions: cors.CorsOptions = {
-  origin: function (
-    origin: string | undefined, 
-    callback: (err: Error | null, allow?: boolean) => void
-  ) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+app.use(cors({
+  origin: ['https://knowbie.onrender.com', 'http://localhost:5173', 'http://localhost:3000'],
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-};
-
-// Enable preflight requests
-app.options('*', cors(corsOptions));
-
-// Apply CORS middleware
-app.use(cors(corsOptions));
+}));
 
 app.use(express.json());
 
