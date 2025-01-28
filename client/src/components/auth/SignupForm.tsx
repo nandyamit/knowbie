@@ -52,57 +52,57 @@ export const SignupForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-primary-100 py-12 px-4">
       <div className="max-w-md w-full space-y-8">
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form onSubmit={handleSubmit} className="bg-secondary-300 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-primary-200 text-sm font-bold mb-2">
               Username
             </label>
             <input
               type="text"
               value={formData.username}
               onChange={(e) => setFormData({...formData, username: e.target.value})}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.username ? 'border-red-500' : ''}`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-primary-200 leading-tight focus:outline-none focus:shadow-outline ${errors.username ? 'border-red-500' : ''}`}
             />
             {errors.username && <p className="text-red-500 text-xs italic">{errors.username}</p>}
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-primary-200 text-sm font-bold mb-2">
               Email
             </label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-primary-200 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
             />
             {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-primary-200 text-sm font-bold mb-2">
               Password
             </label>
             <input
               type="password"
               value={formData.password}
               onChange={(e) => setFormData({...formData, password: e.target.value})}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.password ? 'border-red-500' : ''}`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-primary-200 leading-tight focus:outline-none focus:shadow-outline ${errors.password ? 'border-red-500' : ''}`}
             />
             {errors.password && <p className="text-red-500 text-xs italic">{errors.password}</p>}
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-primary-200 text-sm font-bold mb-2">
               Confirm Password
             </label>
             <input
               type="password"
               value={formData.confirmPassword}
               onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.confirmPassword ? 'border-red-500' : ''}`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-primary-200 leading-tight focus:outline-none focus:shadow-outline ${errors.confirmPassword ? 'border-red-500' : ''}`}
             />
             {errors.confirmPassword && <p className="text-red-500 text-xs italic">{errors.confirmPassword}</p>}
           </div>
@@ -111,13 +111,13 @@ export const SignupForm = () => {
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="text-gray-600 hover:text-gray-800"
+              className="text-primary-200 hover:text-gray-800"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-secondary-100 hover:bg-secondary-200 text-primary-200 font-bold py-2 px-4 rounded"
             >
               Sign Up
             </button>
