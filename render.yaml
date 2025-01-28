@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: knowbie
+    env: node
+    buildCommand: cd client && npm install && npm run build && cd ../server && npm install && npm run build
+    startCommand: cd server && npm start
