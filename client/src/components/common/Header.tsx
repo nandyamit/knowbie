@@ -1,18 +1,23 @@
 // components/common/Header.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Header = () => {
     const { user, logout } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
+    const navigate = useNavigate();
   
     return (
       <header className="bg-white shadow-md">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex-shrink-0 flex items-center">
-              <img src="Assets/knowbie_logo.png" alt="Knowbie" className="h-8 w-auto" />
+              <img 
+              src="Assets/knowbie_logo.png" 
+              alt="Knowbie" 
+              className="h-16 w-auto cursor-pointer" 
+              onClick={() => navigate('/')}/>
             </div>
   
             <div className="flex items-center">
