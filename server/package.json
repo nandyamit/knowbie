@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "node dist/app.js", 
+    "seed": "node dist/seeds/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
