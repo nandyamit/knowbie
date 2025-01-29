@@ -16,7 +16,7 @@ export const Header = () => {
               <img 
               src="Assets/knowbie_logo.png" 
               alt="Knowbie" 
-              className="h-16 w-auto cursor-pointer" 
+              className="h-16 w-auto cursor-pointer animate-bounceStop" 
               onClick={() => navigate('/')}/>
             </div>
   
