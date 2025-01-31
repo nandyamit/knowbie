@@ -5,22 +5,22 @@ export const Features = () => {
     {
       title: 'Multiple Categories',
       description: 'Test your knowledge in Books, Films, and Music.',
-      icon: '📚'
+      icon: <img src="Assets/multiple_categories_icon.png" alt="Multiple Categories" className="h-16 w-auto mx-auto" />
     },
     {
       title: 'Track Progress',
       description: 'Monitor your improvement with detailed analytics.',
-      icon: '📈'
+      icon: <img src="Assets/track_progress_icon.png" alt="Track Progress" className="h-16 w-auto mx-auto" />
     },
     {
       title: 'Compete & Compare',
       description: 'See how you rank against other users.',
-      icon: '🏆'
+      icon: <img src="Assets/compete_compare_icon.png" alt="Compete & Compare" className="h-16 w-auto mx-auto" />
     },
     {
       title: 'Smart Insights',
       description: 'Get AI-powered recommendations to improve.',
-      icon: '🤖'
+      icon: <img src="Assets/smart_insights_icon.png" alt="Smart Insights" className="h-16 w-auto mx-auto" />
     }
   ];
 
