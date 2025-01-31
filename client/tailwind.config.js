@@ -21,6 +21,22 @@ export default {
     fontFamily: {
       body: ["Nunito"],
     },
+    animation: {
+      bounceStop: 'bounceStop 1s ease-in-out 3',
+      fadeInOut: 'fadeInOut 5s ease-in-out infinite', 
+    },
+    keyframes: {
+      bounceStop: {
+        '0%': { transform: 'translateY(0)' },
+        '50%': { transform: 'translateY(-10px)' },
+        '100%': { transform: 'translateY(0)' },
+      },
+      fadeInOut: {
+        '0%': { opacity: 0 },
+        '50%': { opacity: 1 },
+        '100%': { opacity: 0 },
+      },
+    },
 
   },
   plugins: [],
