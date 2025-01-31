@@ -52,7 +52,7 @@ export const SignupForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary-100 via-secondary-300 to-secondary-200 py-12 px-4">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary-100 via-secondary-100 to-secondary-200 py-12 px-4">
       <div className="max-w-md w-full space-y-8">
         <form onSubmit={handleSubmit} className="bg-secondary-300 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
