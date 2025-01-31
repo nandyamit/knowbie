@@ -23,7 +23,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-primary-100">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary-100 via-secondary-300 to-secondary-100">
       <div className="max-w-md w-full space-y-8 p-8 bg-secondary-300 rounded-lg shadow">
         <h2 className="text-3xl font-bold text-center">Sign in</h2>
         {error && (

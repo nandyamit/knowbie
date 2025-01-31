@@ -14,7 +14,7 @@ export const Header = () => {
           <div className="flex justify-between h-16">
             <div className="flex-shrink-0 flex items-center">
               <img 
-              src="Assets/knowbie_logo.png" 
+              src="Assets/knowbie_logo_header.png" 
               alt="Knowbie" 
               className="h-16 w-auto cursor-pointer animate-bounceStop" 
               onClick={() => navigate('/')}/>
