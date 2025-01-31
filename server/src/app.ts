@@ -4,6 +4,7 @@ import cors from 'cors';
 import { authRoutes } from './routes/auth';
 import { sequelize } from './config/database';
 import { User } from './models/user';
+import openAiRoutes from './routes/openai';
 
 const app = express();
 
@@ -15,6 +16,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Open AI routes
+app.use('/api/openai', openAiRoutes);
 
 // API routes
 app.use('/api/auth', (req: Request, res: Response, next: NextFunction) => {
