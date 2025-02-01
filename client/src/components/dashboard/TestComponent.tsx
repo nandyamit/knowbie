@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
+
 interface Question {
   category: string;
   type: string;
@@ -99,6 +100,10 @@ const TestComponent: React.FC = () => {
 
   const handleNextQuestion = () => {
     const isLastQuestion = state.currentQuestionIndex === state.questions.length - 1;
+    
+    if (isLastQuestion) {
+      handleTestCompletion();
+    }
     
     setState(prev => ({
       ...prev,
@@ -199,6 +204,49 @@ const TestComponent: React.FC = () => {
       </div>
     );
   };
+
+  const handleTestCompletion = async () => {
+    if (!user?.id) {
+      console.log('No user ID found, cannot save score');
+      return;
+    }
+  
+    // Calculate correct and wrong answers
+    const correctAnswers = state.score;
+    const wrongAnswers = state.questions.length - state.score;
+  
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const token = localStorage.getItem('token');
+      
+      await axios.post(
+        `${API_URL}/api/test/score`,
+        {
+          userId: user.id,
+          category: 'Film', // or whatever category is selected
+          score: state.score,
+          totalQuestions: state.questions.length,
+          correctAnswers,
+          wrongAnswers
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      console.log('Score saved successfully with details:', {
+        correctAnswers,
+        wrongAnswers,
+        totalQuestions: state.questions.length
+      });
+    } catch (error) {
+      console.error('Failed to save score:', error);
+    }
+  };
+  
 
   const renderContent = () => {
     if (state.loading) {

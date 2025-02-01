@@ -1,30 +1,55 @@
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+// config/database.ts
+import { sequelize } from './sequelize';
+import { User } from '../models/user';
+import { TestAttempt } from '../models/testAttempt';
 
-dotenv.config();
+export const initializeDatabase = async () => {
+  try {
+    console.log('Testing database connection...');
+    await sequelize.authenticate();
+    console.log('Database connection established successfully.');
 
-console.log('DB Config:', {
- name: process.env.DB_NAME,
- user: process.env.DB_USER,
- password: process.env.DB_PASSWORD?.slice(0,2) + '***',
- host: process.env.DB_HOST
-});
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Development mode: Dropping test_attempts table...');
+      await sequelize.query('DROP TABLE IF EXISTS test_attempts CASCADE');
+      console.log('test_attempts table dropped successfully');
+    }
 
-export const sequelize = new Sequelize(
- process.env.DB_NAME || 'knowbie',
- process.env.DB_USER || 'postgres',
- process.env.DB_PASSWORD || 'password',
- {
-   host: process.env.DB_HOST || 'localhost',
-   dialect: 'postgres',
-   logging: console.log,
-   dialectOptions: process.env.NODE_ENV === 'production' 
-     ? {
-         ssl: {
-           require: true,
-           rejectUnauthorized: false
-         }
-       } 
-     : {}
- }
-);
+    // Define associations
+    console.log('Setting up model associations...');
+    User.hasMany(TestAttempt, {
+      sourceKey: 'id',
+      foreignKey: 'userId',
+      as: 'testAttempts'
+    });
+    
+    TestAttempt.belongsTo(User, {
+      targetKey: 'id',
+      foreignKey: 'userId',
+      as: 'user'
+    });
+
+    // Sync all models
+    console.log('Syncing database models...');
+    await sequelize.sync();
+    console.log('Models synchronized successfully');
+
+    // Verify tables
+    const [tables] = await sequelize.query(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
+    );
+    console.log('Available tables:', tables);
+
+    // Verify TestAttempt table structure
+    const [columns] = await sequelize.query(
+      "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'test_attempts'"
+    );
+    console.log('TestAttempt table columns:', columns);
+
+  } catch (error) {
+    console.error('Database initialization failed:', error);
+    throw error;
+  }
+};
+
+export { sequelize };
