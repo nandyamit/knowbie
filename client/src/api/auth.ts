@@ -2,6 +2,23 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 
+// Create an axios instance with base configuration
+const api = axios.create({
+  baseURL: API_URL,
+  withCredentials: true  // Important for handling cookies/sessions if needed
+});
+
+// Add a request interceptor to include the token in every request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
 interface LoginInput {
  username: string;
  password: string;
@@ -14,23 +31,18 @@ interface RegisterInput {
 }
 
 export const authApi = {
- login: async (data: LoginInput) => {
-   const response = await axios.post(`${API_URL}/api/auth/login`, data);
-   return response.data;
- },
+  login: async (credentials: LoginInput) => {
+    const response = await api.post('/api/auth/login', credentials);
+    return response.data;
+  },
+  
+  validateToken: async (token: string) => {
+    const response = await api.get('/api/auth/validate-token');
+    return response.data;
+  },
 
- register: async (data: RegisterInput) => {
-   const response = await axios.post(`${API_URL}/api/auth/register`, data);
-   return response.data;
- },
-
- getCurrentUser: async () => {
-   const token = localStorage.getItem('token');
-   if (!token) return null;
-   
-   const response = await axios.get(`${API_URL}/api/auth/me`, {
-     headers: { Authorization: `Bearer ${token}` }
-   });
-   return response.data;
- }
+  getCurrentUser: async () => {
+    const response = await api.get('/api/auth/me');
+    return response.data;
+  }
 };
