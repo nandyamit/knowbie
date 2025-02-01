@@ -73,3 +73,36 @@ export const saveTestScore = async (req: Request, res: Response) => {
   }
   console.log('----------------------------------------');
 };
+
+
+export const getTestAttempts = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    const category = req.params.category;
+
+    const attempts = await TestAttempt.findAll({
+      where: {
+        userId,
+        category
+      },
+      order: [['dateTaken', 'DESC']],
+      attributes: [
+        'id',
+        'category',
+        'score',
+        'totalQuestions',
+        'correctAnswers',
+        'wrongAnswers',
+        'dateTaken'
+      ]
+    });
+
+    res.status(200).json(attempts);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    res.status(500).json({ 
+      error: 'Failed to fetch test attempts',
+      details: errorMessage
+    });
+  }
+};
