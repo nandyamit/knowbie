@@ -10,6 +10,7 @@ import {
   ResponsiveContainer 
 } from 'recharts';
 import axios from 'axios';
+import BadgeDisplay from '../../components/BadgeDisplay'; 
 
 interface TestAttempt {
   id: string;
@@ -42,6 +43,30 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
   const [timeRange, setTimeRange] = useState<'all' | 'year' | 'month' | 'week'>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [availableCategories, setAvailableCategories] = useState<string[]>(['all']);
+  const [badgeCount, setBadgeCount] = useState<number>(0);
+
+  // Fetch badges count
+  useEffect(() => {
+    const fetchBadges = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          `${API_URL}/api/badges/${userId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        setBadgeCount(response.data.length);
+      } catch (error) {
+        console.error('Error fetching badges:', error);
+        setBadgeCount(0);
+      }
+    };
+
+    fetchBadges();
+  }, [userId]);
 
   useEffect(() => {
     const fetchAttempts = async () => {
@@ -264,15 +289,15 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
         </div>
         <div className="p-3 bg-blue-50 rounded-lg">
           <p className="text-sm text-gray-600">Badges Earned</p>
-          <p className="text-xl font-bold text-blue-600">Coming soon...</p>
+          <p className="text-xl font-bold text-blue-600" id="badges-count">
+            {badgeCount}
+          </p>
         </div>
       </div>
 
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
         <h3 className="text-lg font-semibold mb-3">Your Badges</h3>
-        <div className="text-gray-600">
-          Complete more tests to earn badges and showcase your knowledge!
-        </div>
+        <BadgeDisplay userId={userId} />
       </div>
 
       <div className="h-64 w-full">

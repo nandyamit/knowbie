@@ -2,6 +2,7 @@
 import { sequelize } from './sequelize';
 import { User } from '../models/user';
 import { TestAttempt } from '../models/testAttempt';
+import { UserBadge } from '../models/badge';
 
 export const initializeDatabase = async () => {
   try {
@@ -10,9 +11,11 @@ export const initializeDatabase = async () => {
     console.log('Database connection established successfully.');
 
     if (process.env.NODE_ENV !== 'production') {
-      console.log('Development mode: Dropping test_attempts table...');
+      console.log('Development mode: Dropping test_attempts and user_badges tables...');
       await sequelize.query('DROP TABLE IF EXISTS test_attempts CASCADE');
-      console.log('test_attempts table dropped successfully');
+      await sequelize.query('DROP TABLE IF EXISTS user_badges CASCADE');
+      await sequelize.query('DROP TYPE IF EXISTS badge_type CASCADE');
+      console.log('Tables dropped successfully');
     }
 
     // Define associations
@@ -29,6 +32,19 @@ export const initializeDatabase = async () => {
       as: 'user'
     });
 
+    // Add Badge associations
+    User.hasMany(UserBadge, {
+      sourceKey: 'id',
+      foreignKey: 'userId',
+      as: 'badges'
+    });
+
+    UserBadge.belongsTo(User, {
+      targetKey: 'id',
+      foreignKey: 'userId',
+      as: 'user'
+    });
+
     // Sync all models
     console.log('Syncing database models...');
     await sequelize.sync();
@@ -40,11 +56,16 @@ export const initializeDatabase = async () => {
     );
     console.log('Available tables:', tables);
 
-    // Verify TestAttempt table structure
-    const [columns] = await sequelize.query(
+    // Verify TestAttempt and UserBadge table structures
+    const [testAttemptColumns] = await sequelize.query(
       "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'test_attempts'"
     );
-    console.log('TestAttempt table columns:', columns);
+    console.log('TestAttempt table columns:', testAttemptColumns);
+
+    const [userBadgeColumns] = await sequelize.query(
+      "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'user_badges'"
+    );
+    console.log('UserBadge table columns:', userBadgeColumns);
 
   } catch (error) {
     console.error('Database initialization failed:', error);

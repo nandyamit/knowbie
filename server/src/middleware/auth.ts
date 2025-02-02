@@ -1,3 +1,4 @@
+// middleware/auth.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -18,6 +19,7 @@ declare global {
   }
 }
 
+// Existing middleware - keep for backward compatibility
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
@@ -45,3 +47,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     res.status(500).json({ error: 'Server error during token verification' });
   }
 };
+
+// Export authenticateToken as an alias for authMiddleware for new badge routes
+export const authenticateToken = authMiddleware;

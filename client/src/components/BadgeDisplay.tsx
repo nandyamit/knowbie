@@ -1,0 +1,100 @@
+// components/BadgeDisplay.tsx
+import React, { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { Award } from 'lucide-react';
+import axios from 'axios';
+
+interface Badge {
+  id: string;
+  badgeType: string;
+  earnedAt: string;
+}
+
+interface BadgeDisplayProps {
+  userId: string;
+  className?: string;
+}
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+const BadgeDisplay: FC<BadgeDisplayProps> = ({ userId, className = '' }) => {
+  const [badges, setBadges] = useState<Badge[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBadges = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get<Badge[]>(
+          `${API_URL}/api/badges/${userId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        setBadges(response.data);
+      } catch (error) {
+        console.error('Error fetching badges:', error);
+        setError('Failed to load badges');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBadges();
+  }, [userId]);
+
+  const getBadgeColor = (badgeType: string): string => {
+    const colors: Record<string, string> = {
+      'High Five!': 'bg-blue-100 text-blue-700 border-blue-200',
+      'Perfect Ten': 'bg-purple-100 text-purple-700 border-purple-200',
+      'Triple Crown': 'bg-yellow-100 text-yellow-700 border-yellow-200',
+      'Scene Stealer': 'bg-red-100 text-red-700 border-red-200',
+      'Bookworm Elite': 'bg-green-100 text-green-700 border-green-200',
+      'Rhythm Master': 'bg-indigo-100 text-indigo-700 border-indigo-200'
+    };
+    return colors[badgeType] || 'bg-gray-100 text-gray-700 border-gray-200';
+  };
+
+  if (loading) {
+    return <div className="animate-pulse p-4">Loading badges...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
+  return (
+    <div className={className}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {badges.map((badge) => (
+          <div
+            key={badge.id}
+            className={`p-4 rounded-lg border ${getBadgeColor(badge.badgeType)} flex items-center space-x-3`}
+          >
+            <Award className="h-6 w-6" />
+            <div>
+              <h3 className="font-semibold">{badge.badgeType}</h3>
+              <p className="text-sm">
+                Earned {new Date(badge.earnedAt).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {badges.length === 0 && (
+        <div className="text-center p-6 bg-gray-50 rounded-lg">
+          <Award className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+          <p className="text-gray-600">
+            Complete more quizzes to earn badges and showcase your knowledge!
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default BadgeDisplay;
