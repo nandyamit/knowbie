@@ -1,7 +1,5 @@
 // components/BadgeDisplay.tsx
 import React, { useEffect, useState } from 'react';
-import type { FC } from 'react';
-import { Award } from 'lucide-react';
 import axios from 'axios';
 
 interface Badge {
@@ -17,7 +15,7 @@ interface BadgeDisplayProps {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-const BadgeDisplay: FC<BadgeDisplayProps> = ({ userId, className = '' }) => {
+const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ userId, className = '' }) => {
   const [badges, setBadges] = useState<Badge[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +72,9 @@ const BadgeDisplay: FC<BadgeDisplayProps> = ({ userId, className = '' }) => {
             key={badge.id}
             className={`p-4 rounded-lg border ${getBadgeColor(badge.badgeType)} flex items-center space-x-3`}
           >
-            <Award className="h-6 w-6" />
+            <div className="w-6 h-6 flex items-center justify-center">
+              🏆
+            </div>
             <div>
               <h3 className="font-semibold">{badge.badgeType}</h3>
               <p className="text-sm">
@@ -87,7 +87,7 @@ const BadgeDisplay: FC<BadgeDisplayProps> = ({ userId, className = '' }) => {
 
       {badges.length === 0 && (
         <div className="text-center p-6 bg-gray-50 rounded-lg">
-          <Award className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+          <div className="text-4xl mb-3">🏆</div>
           <p className="text-gray-600">
             Complete more quizzes to earn badges and showcase your knowledge!
           </p>
