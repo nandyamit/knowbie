@@ -14,6 +14,13 @@ export const Dashboard = () => {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Grid layout for dashboard components */}
         <div className="grid grid-cols-1 gap-6">
+          {/* Test Section */}
+          <div className="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div className="p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Choose a Trivia</h2>
+              <TestComponent />
+            </div>
+          </div>
           {/* Performance Component */}
           <div className="bg-white overflow-hidden shadow-sm rounded-lg">
             <div className="p-6">
@@ -24,17 +31,11 @@ export const Dashboard = () => {
           {/* Enhanced Insights Component */}
           <div className="bg-white overflow-hidden shadow-sm rounded-lg">
             <div className="p-6">
-              
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Learning Insights</h2>
+            <p className="text-xl font-bold text-blue-600">Coming soon...</p>
             </div>
           </div>
 
-          {/* Test Section */}
-          <div className="bg-white overflow-hidden shadow-sm rounded-lg">
-            <div className="p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Choose a Trivia</h2>
-              <TestComponent />
-            </div>
-          </div>
         </div>
       </main>
     </div>

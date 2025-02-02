@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 export const LoginForm = () => {
@@ -8,8 +8,13 @@ export const LoginForm = () => {
     password: ''
   });
   const [error, setError] = useState('');
-  const { login } = useAuth();
+  const { login, user, loading } = useAuth();
   const navigate = useNavigate();
+
+  // If user is already logged in, redirect to dashboard
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +26,10 @@ export const LoginForm = () => {
       console.error('Login error:', err.response?.data);
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary-100 via-secondary-100 to-secondary-200">
