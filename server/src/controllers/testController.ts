@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { TestAttempt } from '../models/testAttempt';
 import { sequelize } from '../config/database';
 import { ValidationError, DatabaseError } from 'sequelize';
+import { checkAndAwardBadges } from './badgeController';
 
 export const saveTestScore = async (req: Request, res: Response) => {
   console.log('----------------------------------------');
@@ -14,7 +15,7 @@ export const saveTestScore = async (req: Request, res: Response) => {
 
   try {
     const { category, score, totalQuestions, correctAnswers, wrongAnswers } = req.body;
-    const userId = req.body.userId || req.user?.userId; // Use userId from token if not in body
+    const userId = req.body.userId || req.user?.userId;
 
     if (!userId) {
       throw new Error('User ID not found in request or token');
@@ -41,10 +42,17 @@ export const saveTestScore = async (req: Request, res: Response) => {
 
     console.log('Test attempt created successfully:', testAttempt.toJSON());
 
+    // Check and award badges using the separate badge controller
+    const newBadges = await checkAndAwardBadges(userId, category, correctAnswers);
+    console.log('Badges checked and awarded:', newBadges);
+
     await t.commit();
     console.log('Transaction committed');
     
-    res.status(200).json(testAttempt);
+    res.status(200).json({
+      testAttempt,
+      newBadges
+    });
   } catch (error: unknown) {
     await t.rollback();
     console.log('Transaction rolled back');
@@ -73,7 +81,6 @@ export const saveTestScore = async (req: Request, res: Response) => {
   }
   console.log('----------------------------------------');
 };
-
 
 export const getTestAttempts = async (req: Request, res: Response) => {
   try {
