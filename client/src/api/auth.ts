@@ -28,11 +28,19 @@ interface RegisterInput {
  username: string;
  email: string;
  password: string;
+ confirmPassword?: string;  // Optional, as it's not sent to backend
 }
 
 export const authApi = {
   login: async (credentials: LoginInput) => {
     const response = await api.post('/api/auth/login', credentials);
+    return response.data;
+  },
+  
+  register: async (data: RegisterInput) => {
+    // Destructure to remove confirmPassword before sending to backend
+    const { confirmPassword, ...registerData } = data;
+    const response = await api.post('/api/auth/register', registerData);
     return response.data;
   },
   
