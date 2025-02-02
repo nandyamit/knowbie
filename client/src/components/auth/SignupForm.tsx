@@ -1,7 +1,10 @@
 // components/auth/SignupForm.tsx
+// components/auth/SignupForm.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authApi } from '../../api/auth';
+import axios from 'axios';  // Import axios directly
+
+const API_URL = import.meta.env.VITE_API_URL as string;
 
 export const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -34,7 +37,12 @@ export const SignupForm = () => {
   
     try {
       console.log('Submitting registration:', formData);
-      const response = await authApi.register(formData);
+      // Use axios directly instead of authApi
+      const response = await axios.post(`${API_URL}/api/auth/register`, {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password
+      });
       console.log('Registration response:', response);
       navigate('/login');
     } catch (err: any) {
