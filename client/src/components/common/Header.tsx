@@ -34,10 +34,10 @@ export const Header = () => {
                   </button>
   
                   {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-secondary-200 ring-2 ring-secondary-100 ring-opacity-50">
                       <button
                         onClick={logout}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        className="block px-4 py-2 text-sm rounded-md shadow-lg text-primary-200 hover:bg-secondary-100 w-full text-left"
                       >
                         Sign out
                       </button>
@@ -46,8 +46,10 @@ export const Header = () => {
                 </div>
               ) : (
                 <div className="flex items-center space-x-4">
-                  <Link to="/login" className="bg-secondary-100 text-primary-200 px-4 py-2 rounded-md hover:bg-secondary-200 ">Sign in</Link>
-                  <Link to="/signup" className="bg-secondary-100 text-primary-200 px-4 py-2 rounded-md hover:bg-secondary-200">
+                  <Link to="/login" className=" bg-secondary-200 ring-2 ring-secondary-100 ring-opacity-50 text-primary-200 px-4 py-2 rounded-md hover:bg-secondary-100 ">
+                  Sign in
+                  </Link>
+                  <Link to="/signup" className=" bg-secondary-200 ring-2 ring-secondary-100 ring-opacity-50 text-primary-200 px-4 py-2 rounded-md hover:bg-secondary-100">
                     Sign up
                   </Link>
                 </div>
