@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import TestComponent from '../components/dashboard/TestComponent';
 import PerformanceComponent from '../components/dashboard/PerformanceComponent';
+import EnhancedInsightsComponent from '../components/dashboard/EnhancedInsightsComponent';
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -20,11 +21,10 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          {/* Placeholder for Insights Component */}
+          {/* Enhanced Insights Component */}
           <div className="bg-white overflow-hidden shadow-sm rounded-lg">
             <div className="p-6">
-              <h2 className="text-xl font-semibold text-gray-900">Insights</h2>
-              <p className="text-gray-500">Coming soon...</p>
+              {user && <EnhancedInsightsComponent />}
             </div>
           </div>
 
