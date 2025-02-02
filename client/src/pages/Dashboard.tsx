@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import TestComponent from '../components/dashboard/TestComponent';
 import PerformanceComponent from '../components/dashboard/PerformanceComponent';
-import EnhancedInsightsComponent from '../components/dashboard/EnhancedInsightsComponent';
+//import EnhancedInsightsComponent from '../components/dashboard/EnhancedInsightsComponent';
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -24,7 +24,7 @@ export const Dashboard = () => {
           {/* Enhanced Insights Component */}
           <div className="bg-white overflow-hidden shadow-sm rounded-lg">
             <div className="p-6">
-              {user && <EnhancedInsightsComponent />}
+              
             </div>
           </div>
 
