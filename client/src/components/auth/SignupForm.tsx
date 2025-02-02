@@ -125,7 +125,7 @@ export const SignupForm = () => {
             </button>
             <button
               type="submit"
-              className="bg-secondary-100 hover:bg-secondary-200 text-primary-200 font-bold py-2 px-4 rounded"
+              className=" bg-secondary-200 ring-2 ring-secondary-100 ring-opacity-50 hover:bg-secondary-100 text-primary-200 font-bold py-2 px-4 rounded"
             >
               Sign Up
             </button>
