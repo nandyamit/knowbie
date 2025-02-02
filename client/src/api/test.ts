@@ -1,10 +1,9 @@
 // Test related API calls
-
-// api/test.ts
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+// ✅ Save test score and return earned badges
 export const saveTestScore = async (data: {
   userId: string;
   category: string;
@@ -22,9 +21,14 @@ export const saveTestScore = async (data: {
       }
     }
   );
-  return response.data;
+
+  return {
+    testAttempt: response.data.testAttempt, // The test attempt that was saved
+    newBadges: response.data.badges || []   // Any newly assigned badges
+  };
 };
 
+// Fetch user stats
 export const getUserStats = async (userId: string, category: string) => {
   const token = localStorage.getItem('token');
   const response = await axios.get(
