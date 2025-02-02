@@ -6,6 +6,7 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
+  Legend,
   ResponsiveContainer 
 } from 'recharts';
 import axios from 'axios';
@@ -26,6 +27,12 @@ interface Stats {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+const CATEGORY_COLORS = {
+  Film: '#8884d8',
+  Music: '#82ca9d',
+  Books: '#ffc658'
+};
+
 export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) => {
   const [allAttempts, setAllAttempts] = useState<TestAttempt[]>([]);
   const [displayedAttempts, setDisplayedAttempts] = useState<any[]>([]);
@@ -40,7 +47,6 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
     const fetchAttempts = async () => {
       try {
         const token = localStorage.getItem('token');
-        // Fetch attempts for all categories
         const categories = ['Film', 'Music', 'Books'];
         const allAttemptsData: TestAttempt[] = [];
 
@@ -56,12 +62,10 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
           allAttemptsData.push(...response.data);
         }
 
-        // Sort by date
         const sortedAttempts = allAttemptsData.sort((a, b) => 
           new Date(a.dateTaken).getTime() - new Date(b.dateTaken).getTime()
         );
 
-        // Determine available categories
         const uniqueCategories = [...new Set(sortedAttempts.map(attempt => attempt.category))];
         setAvailableCategories(['all', ...uniqueCategories]);
         
@@ -82,27 +86,36 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
       let filteredAttempts = filterAttemptsByTimeRange(allAttempts);
 
       if (selectedCategory === 'all') {
-        // Group by date and show total correct answers for each day
+        // Group by date with category breakdowns
         const groupedByDate = filteredAttempts.reduce((acc, attempt) => {
           const date = new Date(attempt.dateTaken).toISOString().split('T')[0];
-          const attemptsByDate = filteredAttempts.filter(a => 
-            new Date(a.dateTaken).toISOString().split('T')[0] === date
-          );
           
           if (!acc[date]) {
             acc[date] = {
               dateTaken: attempt.dateTaken,
-              correctAnswers: attemptsByDate.reduce((sum, a) => sum + a.correctAnswers, 0)
+              Film: 0,
+              Music: 0,
+              Books: 0,
+              total: 0
             };
           }
+          
+          // Add correct answers to the specific category
+          acc[date][attempt.category] += attempt.correctAnswers;
+          // Update total for the day
+          acc[date].total += attempt.correctAnswers;
+          
           return acc;
-        }, {} as Record<string, { dateTaken: string; correctAnswers: number }>);
+        }, {} as Record<string, any>);
 
         setDisplayedAttempts(Object.values(groupedByDate));
       } else {
-        // Filter for specific category
+        // Keep existing logic for individual categories
         filteredAttempts = filteredAttempts.filter(attempt => attempt.category === selectedCategory);
-        setDisplayedAttempts(filteredAttempts);
+        setDisplayedAttempts(filteredAttempts.map(attempt => ({
+          dateTaken: attempt.dateTaken,
+          correctAnswers: attempt.correctAnswers
+        })));
       }
     };
 
@@ -126,6 +139,34 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
     });
   };
 
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-3 border rounded shadow-lg">
+          <p className="text-sm font-semibold">{formatDate(label)}</p>
+          {payload.map((entry: any) => {
+            if (entry.value > 0) {
+              return (
+                <p key={entry.dataKey} className="text-sm" style={{ color: entry.color }}>
+                  {entry.dataKey}: {entry.value} correct answers
+                </p>
+              );
+            }
+            return null;
+          })}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
   if (loading) {
     return <div className="flex justify-center items-center h-48">Loading...</div>;
   }
@@ -134,11 +175,55 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
     return <div className="text-red-500 text-center">{error}</div>;
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric'
-    });
+  const renderChart = () => {
+    if (selectedCategory === 'all') {
+      return (
+        <BarChart
+          data={displayedAttempts}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis 
+            dataKey="dateTaken" 
+            tickFormatter={formatDate}
+          />
+          <YAxis />
+          <Tooltip content={<CustomTooltip />} />
+          <Legend />
+          <Bar dataKey="Film" stackId="a" name="Movie" fill={CATEGORY_COLORS.Film} radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Music" stackId="a" name="Music" fill={CATEGORY_COLORS.Music} radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Books" stackId="a" name="Books" fill={CATEGORY_COLORS.Books} radius={[4, 4, 0, 0]} />
+        </BarChart>
+      );
+    }
+
+    // Original chart for individual categories
+    return (
+      <BarChart
+        data={displayedAttempts}
+        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis 
+          dataKey="dateTaken" 
+          tickFormatter={formatDate}
+        />
+        <YAxis />
+        <Tooltip 
+          labelFormatter={formatDate}
+          formatter={(value: number) => [
+            `${value}`, 
+            'Correct Answers'
+          ]}
+        />
+        <Bar
+          dataKey="correctAnswers"
+          name="Correct Answers"
+          fill={CATEGORY_COLORS[selectedCategory as keyof typeof CATEGORY_COLORS] || '#10B981'}
+          radius={[4, 4, 0, 0]}
+        />
+      </BarChart>
+    );
   };
 
   return (
@@ -183,7 +268,6 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
         </div>
       </div>
 
-      {/* Badges Section */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
         <h3 className="text-lg font-semibold mb-3">Your Badges</h3>
         <div className="text-gray-600">
@@ -193,30 +277,7 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
 
       <div className="h-64 w-full">
         <ResponsiveContainer>
-          <BarChart
-            data={displayedAttempts}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="dateTaken" 
-              tickFormatter={formatDate}
-            />
-            <YAxis />
-            <Tooltip 
-              labelFormatter={formatDate}
-              formatter={(value: number) => [
-                `${value}`, 
-                'Correct Answers'
-              ]}
-            />
-            <Bar
-              dataKey="correctAnswers"
-              name="Correct Answers"
-              fill="#10B981"
-              radius={[4, 4, 0, 0]}
-            />
-          </BarChart>
+          {renderChart()}
         </ResponsiveContainer>
       </div>
     </div>
