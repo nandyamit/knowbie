@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
-
 interface Question {
   category: string;
   type: string;
@@ -23,7 +22,15 @@ interface TestState {
   showFeedback: boolean;
   explanation: string | null;
   loadingExplanation: boolean;
+  selectedCategory: string | null;  // New field for category selection
 }
+
+// Category configuration
+const CATEGORIES = {
+  Film: { id: '11', label: 'Movie Trivia', description: 'Test your knowledge about movies!' },
+  Music: { id: '12', label: 'Music Trivia', description: 'Challenge your music expertise!' },
+  Books: { id: '10', label: 'Book Trivia', description: 'Show off your literary wisdom!' }
+};
 
 const TestComponent: React.FC = () => {
   const [state, setState] = useState<TestState>({
@@ -36,11 +43,13 @@ const TestComponent: React.FC = () => {
     selectedAnswer: null,
     showFeedback: false,
     explanation: null,
-    loadingExplanation: false
+    loadingExplanation: false,
+    selectedCategory: null
   });
 
   const { user } = useAuth();
 
+  // Keep all existing helper functions (fetchExplanation, handleAnswer, getCurrentQuestion, shuffleAnswers)...
   const fetchExplanation = async (question: string, correctAnswer: string) => {
     setState(prev => ({ ...prev, loadingExplanation: true }));
     try {
@@ -57,8 +66,6 @@ const TestComponent: React.FC = () => {
         }
       });
       
-      console.log('Got response:', response.data);
-      
       setState(prev => ({
         ...prev,
         explanation: response.data.explanation,
@@ -72,7 +79,7 @@ const TestComponent: React.FC = () => {
         loadingExplanation: false
       }));
     }
-};
+  };
 
   const handleAnswer = async (answer: string) => {
     const currentQuestion = getCurrentQuestion();
@@ -85,7 +92,6 @@ const TestComponent: React.FC = () => {
       score: isCorrect ? prev.score + 1 : prev.score
     }));
 
-    // Fetch explanation for the correct answer
     await fetchExplanation(currentQuestion.question, currentQuestion.correct_answer);
   };
 
@@ -98,32 +104,18 @@ const TestComponent: React.FC = () => {
     return answers.sort(() => Math.random() - 0.5);
   };
 
-  const handleNextQuestion = () => {
-    const isLastQuestion = state.currentQuestionIndex === state.questions.length - 1;
-    
-    if (isLastQuestion) {
-      handleTestCompletion();
-    }
-    
-    setState(prev => ({
-      ...prev,
-      currentQuestionIndex: prev.currentQuestionIndex + 1,
-      showResult: isLastQuestion,
-      selectedAnswer: null,
-      showFeedback: false,
-      explanation: null
-    }));
-  };
-
-  const fetchQuestions = async () => {
+  // Modified fetchQuestions to use category
+  const fetchQuestions = async (category: string) => {
     setState(prev => ({ ...prev, loading: true, error: null }));
     try {
-      const response = await axios.get('https://opentdb.com/api.php?amount=10&category=11');
+      const categoryId = CATEGORIES[category as keyof typeof CATEGORIES].id;
+      const response = await axios.get(`https://opentdb.com/api.php?amount=10&category=${categoryId}`);
       if (response.data.results) {
         setState(prev => ({
           ...prev,
           questions: response.data.results,
-          loading: false
+          loading: false,
+          selectedCategory: category
         }));
       }
     } catch (error) {
@@ -135,8 +127,8 @@ const TestComponent: React.FC = () => {
     }
   };
 
-  const handleStartTest = () => {
-    fetchQuestions();
+  const handleStartTest = (category: string) => {
+    fetchQuestions(category);
   };
 
   const handleRetry = () => {
@@ -150,10 +142,12 @@ const TestComponent: React.FC = () => {
       selectedAnswer: null,
       showFeedback: false,
       explanation: null,
-      loadingExplanation: false
+      loadingExplanation: false,
+      selectedCategory: null
     });
   };
 
+  // Keep all existing helper functions (decodeHtml, getAnswerButtonClass, renderLearningPoint)...
   const decodeHtml = (html: string) => {
     const txt = document.createElement('textarea');
     txt.innerHTML = html;
@@ -205,13 +199,30 @@ const TestComponent: React.FC = () => {
     );
   };
 
+  const handleNextQuestion = () => {
+    const isLastQuestion = state.currentQuestionIndex === state.questions.length - 1;
+    
+    if (isLastQuestion) {
+      handleTestCompletion();
+    }
+    
+    setState(prev => ({
+      ...prev,
+      currentQuestionIndex: prev.currentQuestionIndex + 1,
+      showResult: isLastQuestion,
+      selectedAnswer: null,
+      showFeedback: false,
+      explanation: null
+    }));
+  };
+
+  // Modified handleTestCompletion to use selected category
   const handleTestCompletion = async () => {
-    if (!user?.id) {
-      console.log('No user ID found, cannot save score');
+    if (!user?.id || !state.selectedCategory) {
+      console.log('No user ID or category found, cannot save score');
       return;
     }
   
-    // Calculate correct and wrong answers
     const correctAnswers = state.score;
     const wrongAnswers = state.questions.length - state.score;
   
@@ -223,7 +234,7 @@ const TestComponent: React.FC = () => {
         `${API_URL}/api/test/score`,
         {
           userId: user.id,
-          category: 'Film', // or whatever category is selected
+          category: state.selectedCategory,
           score: state.score,
           totalQuestions: state.questions.length,
           correctAnswers,
@@ -236,18 +247,33 @@ const TestComponent: React.FC = () => {
           }
         }
       );
-      
-      console.log('Score saved successfully with details:', {
-        correctAnswers,
-        wrongAnswers,
-        totalQuestions: state.questions.length
-      });
     } catch (error) {
       console.error('Failed to save score:', error);
     }
   };
-  
 
+  // New component to render category selection
+  const renderCategorySelection = () => {
+    return (
+      <div className="text-center">
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {Object.entries(CATEGORIES).map(([category, { label, description }]) => (
+            <button
+              key={category}
+              onClick={() => handleStartTest(category)}
+              className="bg-white border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200 px-6 py-4 rounded-lg shadow-sm"
+            >
+              <h3 className="text-xl font-semibold mb-2">{label}</h3>
+              <p className="text-sm">{description}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // Modified renderContent to include category selection
   const renderContent = () => {
     if (state.loading) {
       return (
@@ -275,30 +301,21 @@ const TestComponent: React.FC = () => {
       return (
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Test Complete!</h2>
-          <p className="text-lg mb-4">Your score: {state.score} out of {state.questions.length}</p>
+          <p className="text-lg mb-4">
+            Your {state.selectedCategory} score: {state.score} out of {state.questions.length}
+          </p>
           <button
             onClick={handleRetry}
             className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
           >
-            Try Again
+            Try Another Category
           </button>
         </div>
       );
     }
 
     if (state.questions.length === 0) {
-      return (
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Movie Trivia</h2>
-          <p className="mb-4">Test your knowledge about movies!</p>
-          <button
-            onClick={handleStartTest}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >
-            Start Test
-          </button>
-        </div>
-      );
+      return renderCategorySelection();
     }
 
     const currentQuestion = getCurrentQuestion();
