@@ -31,7 +31,7 @@ export const Dashboard = () => {
           {/* Test Section */}
           <div className="bg-white overflow-hidden shadow-sm rounded-lg">
             <div className="p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Knowledge Test</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Choose a Trivia</h2>
               <TestComponent />
             </div>
           </div>

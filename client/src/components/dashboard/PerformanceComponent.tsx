@@ -154,7 +154,7 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
             {availableCategories.map(category => (
               <option key={category} value={category}>
                 {category === 'Film' ? 'Movie' : 
-                 category === 'all' ? 'All' : 
+                 category === 'all' ? 'All Trivia' : 
                  category.charAt(0).toUpperCase() + category.slice(1)}
               </option>
             ))}
