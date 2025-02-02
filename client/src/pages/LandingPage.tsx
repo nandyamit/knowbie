@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Features } from '../components/marketing/Features';
+import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 
 export const LandingPage = () => {
+  const { user } = useAuth(); // Get the user authentication status
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-100 via-secondary-100 to-secondary-200 py-20 flex flex-col items-center justify-center">
       <main className="w-full flex-1">
@@ -18,10 +21,19 @@ export const LandingPage = () => {
             <div className="mt-8">
               <Link
                 to="/signup"
-                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-lg text-primary-200 bg-secondary-300 hover:bg-secondary-200 mb-8 shadow-md p-6"
+                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-lg text-primary-200  bg-secondary-300 ring-2 ring-secondary-100 ring-opacity-50 hover:bg-secondary-200 mb-8 shadow-md p-6"
               >
                 Get Started
               </Link>
+              <br />
+              {user && ( // Only show this link if the user is logged in
+                <Link
+                  to="/dashboard"
+                  className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-lg text-primary-200  bg-secondary-300 ring-2 ring-secondary-100 ring-opacity-50 hover:bg-secondary-200 shadow-md p-6"
+                >
+                  Go to Dashboard
+                </Link>
+              )}
             </div>
           </div>
           <Features />
