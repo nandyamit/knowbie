@@ -12,6 +12,7 @@
     "sourceMap": true,
     "declaration": true,
     "types": ["node"],
+    "moduleResolution": "node",
     "lib": ["es6"]
   },
   "include": ["src/**/*"],
