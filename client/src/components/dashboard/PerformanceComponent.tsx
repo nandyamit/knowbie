@@ -222,7 +222,6 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
       );
     }
 
-    // Original chart for individual categories
     return (
       <BarChart
         data={displayedAttempts}
