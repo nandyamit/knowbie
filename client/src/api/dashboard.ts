@@ -1,4 +1,4 @@
-import { ApiResponse, TestAttempt } from "../types";
+import { ApiResponse, TestAttempt } from "../types/auth";
 
 export const fetchUserTestAttempts = async (userId: number): Promise<TestAttempt[]> => {
   try {

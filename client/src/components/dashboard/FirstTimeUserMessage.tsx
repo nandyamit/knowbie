@@ -3,7 +3,7 @@ import { fetchUserTestAttempts } from "../../api/dashboard";
 import { TestAttempt } from "../../types/auth";
 
 interface FirstTimeUserMessageProps {
-  userId: string;
+  userId: number;
 }
 
 const FirstTimeUserMessage: React.FC<FirstTimeUserMessageProps> = ({ userId }) => {
@@ -12,6 +12,7 @@ const FirstTimeUserMessage: React.FC<FirstTimeUserMessageProps> = ({ userId }) =
 
   useEffect(() => {
     const checkUserAttempts = async () => {
+      console.log("userId:", userId);  // Log the userId to check if it's correct
       try {
         const attempts: TestAttempt[] = await fetchUserTestAttempts(Number(userId));
         setIsFirstTimeUser(attempts.length === 0); // Show message only if no attempts exist
@@ -22,7 +23,7 @@ const FirstTimeUserMessage: React.FC<FirstTimeUserMessageProps> = ({ userId }) =
         setLoading(false); // Ensure loading stops
       }
     };
-
+  
     if (userId) {
       checkUserAttempts();
     } else {
@@ -30,11 +31,12 @@ const FirstTimeUserMessage: React.FC<FirstTimeUserMessageProps> = ({ userId }) =
     }
   }, [userId]);
 
+  // If still loading or not a first-time user, don't show the message
   if (loading || !isFirstTimeUser) return null;
 
   return (
     <div className="text-primary-200 text-3xl font-bold px-4 py-3 rounded-lg mb-4 text-center">
-      <p>Welcome! Take your first test to get started!</p>
+      <p>Welcome! Take a test to get started!</p>
     </div>
   );
 };
