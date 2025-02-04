@@ -32,13 +32,7 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          {/* Enhanced Insights Component */}
-          <div className="bg-secondary-300 overflow-hidden shadow-sm rounded-lg">
-            <div className="p-6">
-              <h2 className="text-3xl text-center font-bold text-primary-200 mb-4">Learning Insights</h2>
-              <p className="text-xl text-center font-bold text-blue-600">Coming soon...</p>
-            </div>
-          </div>
+
         </div>
       </main>
     </div>
