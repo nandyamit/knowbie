@@ -10,6 +10,7 @@ export const LoginForm = () => {
   const [error, setError] = useState('');
   const { login, user, loading } = useAuth();
   const navigate = useNavigate();
+  const loadingGif = "/Assets/KnowbieFlapping.gif"; 
 
   // If user is already logged in, redirect to dashboard
   if (user) {
@@ -28,7 +29,14 @@ export const LoginForm = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-primary-100 via-secondary-100 to-secondary-200 py-20 flex flex-col items-center justify-center">
+        <div className="max-w-md w-full space-y-8 p-8 bg-secondary-300 rounded-lg shadow flex flex-col items-center justify-center">
+          <img src={loadingGif} alt="Loading..." className="w-45 h-40" />
+          <p className="text-3xl text-medium font-bold text-primary-200">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

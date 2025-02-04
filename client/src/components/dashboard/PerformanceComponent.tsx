@@ -251,9 +251,8 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
   };
 
   return (
-    <div className="w-full p-4 bg-white rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Your Performance</h2>
+    <div className="w-full p-4 bg-primary-100 rounded-lg shadow-md">
+      <div className="flex justify-end items-center mb-4">
         <div className="flex gap-4">
           <select 
             className="p-2 border rounded-md"
@@ -294,8 +293,8 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
         </div>
       </div>
 
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <h3 className="text-lg font-semibold mb-3">Your Badges</h3>
+      <div className="mb-6 p-4 bg-white rounded-lg">
+        <h3 className="text-lg text-center font-semibold mb-3">Your Badges</h3>
         <BadgeDisplay userId={userId} />
       </div>
 
