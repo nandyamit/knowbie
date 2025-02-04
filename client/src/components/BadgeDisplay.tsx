@@ -101,13 +101,6 @@ const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ userId, className = '' }) =
 
       {badges.length === 0 && (
         <div className="text-center p-6 bg-gray-50 rounded-lg">
-          <div className="w-16 h-16 mx-auto mb-3">
-            <img
-              src="/badges/empty-badge.png"
-              alt="Empty badge"
-              className="w-full h-full object-contain opacity-40"
-            />
-          </div>
           <p className="text-gray-600">
             Complete more quizzes to earn badges and showcase your knowledge!
           </p>
