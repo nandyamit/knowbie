@@ -252,6 +252,24 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
 
   return (
     <div className="w-full p-4 bg-primary-100 rounded-lg shadow-md">
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="p-3 bg-blue-50 rounded-lg">
+          <p className="text-sm text-gray-600">Total Attempts</p>
+          <p className="text-xl font-bold text-blue-600">{stats?.totalAttempts || 0}</p>
+        </div>
+        <div className="p-3 bg-blue-50 rounded-lg">
+          <p className="text-sm text-gray-600">Badges Earned</p>
+          <p className="text-xl font-bold text-blue-600" id="badges-count">
+            {badgeCount}
+          </p>
+        </div>
+      </div>
+
+      <div className="mb-6 p-4 bg-white rounded-lg">
+        <h3 className="text-lg text-center font-semibold mb-3">Your Badges</h3>
+        <BadgeDisplay userId={userId} />
+      </div>
+
       <div className="flex justify-end items-center mb-4">
         <div className="flex gap-4">
           <select 
@@ -278,24 +296,6 @@ export const PerformanceComponent: React.FC<{ userId: string }> = ({ userId }) =
             <option value="week">Past Week</option>
           </select>
         </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="p-3 bg-blue-50 rounded-lg">
-          <p className="text-sm text-gray-600">Total Attempts</p>
-          <p className="text-xl font-bold text-blue-600">{stats?.totalAttempts || 0}</p>
-        </div>
-        <div className="p-3 bg-blue-50 rounded-lg">
-          <p className="text-sm text-gray-600">Badges Earned</p>
-          <p className="text-xl font-bold text-blue-600" id="badges-count">
-            {badgeCount}
-          </p>
-        </div>
-      </div>
-
-      <div className="mb-6 p-4 bg-white rounded-lg">
-        <h3 className="text-lg text-center font-semibold mb-3">Your Badges</h3>
-        <BadgeDisplay userId={userId} />
       </div>
 
       <div className="h-64 w-full">
