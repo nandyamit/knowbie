@@ -7,7 +7,7 @@ import { User } from './models/user';
 import openAiRoutes from './routes/openai';
 import { initializeDatabase } from './config/database';
 import { testRoutes } from './routes/test';
-import badgeRoutes from './routes/badgeRoutes';
+import { badgeRoutes } from './routes/badgeRoutes';
 
 const app = express();
 
@@ -42,7 +42,7 @@ app.use('/api/test', (req: Request, res: Response, next: NextFunction) => {
 }, testRoutes);
 
 // Badge routes
-app.use('/api', badgeRoutes);
+app.use('/api/badges', badgeRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../../client/dist')));

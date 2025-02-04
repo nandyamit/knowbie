@@ -2,7 +2,7 @@
 import { sequelize } from './sequelize';
 import { User } from '../models/user';
 import { TestAttempt } from '../models/testAttempt';
-import { UserBadge } from '../models/badge';
+import { Badge } from '../models/badge';
 
 export const initializeDatabase = async () => {
   try {
@@ -11,11 +11,10 @@ export const initializeDatabase = async () => {
     console.log('Database connection established successfully.');
 
     if (process.env.NODE_ENV !== 'production') {
-      console.log('Development mode: Dropping test_attempts and user_badges tables...');
+      console.log('Development mode: Dropping test_attempts and badges table...');
       await sequelize.query('DROP TABLE IF EXISTS test_attempts CASCADE');
-      await sequelize.query('DROP TABLE IF EXISTS user_badges CASCADE');
-      await sequelize.query('DROP TYPE IF EXISTS badge_type CASCADE');
-      console.log('Tables dropped successfully');
+      await sequelize.query('DROP TABLE IF EXISTS badges CASCADE');
+      console.log('test_attempts and badges table dropped successfully');
     }
 
     // Define associations
@@ -25,25 +24,26 @@ export const initializeDatabase = async () => {
       foreignKey: 'userId',
       as: 'testAttempts'
     });
-    
+
     TestAttempt.belongsTo(User, {
       targetKey: 'id',
       foreignKey: 'userId',
       as: 'user'
     });
 
-    // Add Badge associations
-    User.hasMany(UserBadge, {
+    // Badge associations
+    User.hasMany(Badge, {
       sourceKey: 'id',
       foreignKey: 'userId',
       as: 'badges'
     });
 
-    UserBadge.belongsTo(User, {
+    Badge.belongsTo(User, {
       targetKey: 'id',
       foreignKey: 'userId',
       as: 'user'
     });
+    // End of Badge associations
 
     // Sync all models
     console.log('Syncing database models...');
@@ -60,12 +60,13 @@ export const initializeDatabase = async () => {
     const [testAttemptColumns] = await sequelize.query(
       "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'test_attempts'"
     );
-    console.log('TestAttempt table columns:', testAttemptColumns);
+    console.log('TestAttempt table columns:', columns);
 
-    const [userBadgeColumns] = await sequelize.query(
-      "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'user_badges'"
+    // Verify Badge table structure
+    const [badgeColumns] = await sequelize.query(
+      "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'badges'"
     );
-    console.log('UserBadge table columns:', userBadgeColumns);
+    console.log('Badge table columns:', badgeColumns);
 
   } catch (error) {
     console.error('Database initialization failed:', error);
