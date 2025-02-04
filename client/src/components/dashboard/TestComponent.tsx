@@ -279,7 +279,7 @@ const TestComponent: React.FC = () => {
               onClick={() => handleStartTest(category)}
               className="text-primary-200 hover:bg-secondary-200 transition-transform duration-200 hover:scale-105 px-6 py-4 rounded-lg shadow-sm flex flex-col items-center"
             ><p className="mb-2">{description}</p>
-              <img src={icon} alt={`${label} icon`} className="w-24 h-24 mb-2" />
+              <img src={icon} alt={`${label} icon`} className="w-32 h-24 mb-2" />
               
             </button>
           ))}
