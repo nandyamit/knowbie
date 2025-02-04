@@ -27,10 +27,26 @@ interface TestState {
 
 // Category configuration
 const CATEGORIES = {
-  Film: { id: '11', label: 'Movie Trivia', description: 'Test your knowledge about movies!' },
-  Music: { id: '12', label: 'Music Trivia', description: 'Challenge your music expertise!' },
-  Books: { id: '10', label: 'Book Trivia', description: 'Show off your literary wisdom!' }
+  Film: { 
+    id: '11', 
+    label: 'Movie Trivia', 
+    description: 'Test your knowledge about movies!', 
+    icon: '/Assets/movies_category_icon.png' 
+  },
+  Music: { 
+    id: '12', 
+    label: 'Music Trivia', 
+    description: 'Challenge your music expertise!', 
+    icon: '/Assets/music_category_icon.png' 
+  },
+  Books: { 
+    id: '10', 
+    label: 'Book Trivia', 
+    description: 'Show off your literary wisdom!', 
+    icon: '/Assets/books_category_icon.png' 
+  }
 };
+
 
 const TestComponent: React.FC = () => {
   const [state, setState] = useState<TestState>({
@@ -256,22 +272,22 @@ const TestComponent: React.FC = () => {
   const renderCategorySelection = () => {
     return (
       <div className="text-center">
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {Object.entries(CATEGORIES).map(([category, { label, description }]) => (
+          {Object.entries(CATEGORIES).map(([category, { label, description, icon }]) => (
             <button
               key={category}
               onClick={() => handleStartTest(category)}
-              className="bg-white border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200 px-6 py-4 rounded-lg shadow-sm"
-            >
-              <h3 className="text-xl font-semibold mb-2">{label}</h3>
-              <p className="text-sm">{description}</p>
+              className="text-primary-200 hover:bg-secondary-200 transition-transform duration-200 hover:scale-105 px-6 py-4 rounded-lg shadow-sm flex flex-col items-center"
+            ><p className="mb-2">{description}</p>
+              <img src={icon} alt={`${label} icon`} className="w-24 h-24 mb-2" />
+              
             </button>
           ))}
         </div>
       </div>
     );
   };
+  
 
   // Modified renderContent to include category selection
   const renderContent = () => {
@@ -306,7 +322,7 @@ const TestComponent: React.FC = () => {
           </p>
           <button
             onClick={handleRetry}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+            className="bg-secondary-200 text-primary-200 px-6 py-2 rounded hover:bg-secondary-100"
           >
             Try Another Category
           </button>
@@ -379,7 +395,7 @@ const TestComponent: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-sm">
+    <div className="w-full bg-primary-100 rounded-lg shadow-sm">
       <div className="p-6">
         {renderContent()}
       </div>
