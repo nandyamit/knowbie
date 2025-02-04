@@ -15,6 +15,16 @@ interface BadgeDisplayProps {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+// Badge image mapping using public badge directory
+const BADGE_IMAGES = {
+  'High Five!': '/badges/high-five-badge.png',
+  'Perfect Ten': '/badges/perfect-ten-badge.png',
+  'Triple Crown': '/badges/triple-crown-badge.png',
+  'Scene Stealer': '/badges/scene-stealer-badge.png',
+  'Bookworm Elite': '/badges/bookworm-badge.png',
+  'Rhythm Master': '/badges/rhythm-master-badge.png'
+};
+
 const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ userId, className = '' }) => {
   const [badges, setBadges] = useState<Badge[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,8 +82,12 @@ const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ userId, className = '' }) =
             key={badge.id}
             className={`p-4 rounded-lg border ${getBadgeColor(badge.badgeType)} flex items-center space-x-3`}
           >
-            <div className="w-6 h-6 flex items-center justify-center">
-              🏆
+            <div className="w-12 h-12 flex-shrink-0">
+              <img
+                src={BADGE_IMAGES[badge.badgeType as keyof typeof BADGE_IMAGES]}
+                alt={`${badge.badgeType} badge`}
+                className="w-full h-full object-contain"
+              />
             </div>
             <div>
               <h3 className="font-semibold">{badge.badgeType}</h3>
@@ -87,7 +101,13 @@ const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ userId, className = '' }) =
 
       {badges.length === 0 && (
         <div className="text-center p-6 bg-gray-50 rounded-lg">
-          <div className="text-4xl mb-3">🏆</div>
+          <div className="w-16 h-16 mx-auto mb-3">
+            <img
+              src="/badges/empty-badge.png"
+              alt="Empty badge"
+              className="w-full h-full object-contain opacity-40"
+            />
+          </div>
           <p className="text-gray-600">
             Complete more quizzes to earn badges and showcase your knowledge!
           </p>
