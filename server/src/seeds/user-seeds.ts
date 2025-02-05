@@ -23,6 +23,12 @@ export const seedUsers = async (): Promise<void> => {
                     email: "janedoe@example.com",
                     password: hashedPassword,
                 },
+                {
+                    id: uuidv4(),
+                    username: "chestertester",
+                    email: "chestertester@example.com",
+                    password: hashedPassword,
+                },
             ],
             { 
                 individualHooks: false // Set to false since we're manually hashing

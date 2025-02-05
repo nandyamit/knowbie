@@ -139,6 +139,18 @@ export const seedTestAttempts = async (): Promise<void> => {
             dateTaken: new Date('2025-01-30 19:00:00')
           }
         ]);
+      } else if (user.username === 'chestertester') {
+        // chestertester (Dem0) user's test attempt
+        await TestAttempt.create({
+          id: uuidv4(),
+          userId: user.id,
+          category: 'Film',
+          score: 80,
+          totalQuestions: 5,
+          correctAnswers: 4,
+          wrongAnswers: 1,
+          dateTaken: new Date('2025-02-01 12:00:00')
+        });
       }
     }
     console.log('Test attempts seeded successfully');
