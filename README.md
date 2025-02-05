@@ -61,7 +61,6 @@ Dashboard
 Brand Assets
 ![alt text](<Screenshot 2025-02-04 145323.png>)
 
-## Usage and Deployment
 ## **License**
 - MIT License
 
