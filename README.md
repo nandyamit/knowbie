@@ -10,7 +10,7 @@
 - [Contributing](#contributing)
 - [Contact](#contact)
 
-## Description
+
 ## **Description**
 Knowbie is a modern and engaging knowledge-testing platform designed for users of all ages to test their general knowledge across various categories and track progress over time. The platform offers an interactive and fun way to learn, improve, and stay motivated. 
 
@@ -52,7 +52,14 @@ If you have any suggested improvements following your experience, please referen
 
 ## Features
 ## **Screenshots**
-- TBD
+Starting page
+![alt text](<Screenshot 2025-02-04 213413.png>)
+Create your account
+![alt text](<Screenshot 2025-02-04 213513.png>)
+Dashboard
+![alt text](<Screenshot 2025-02-04 213809.png>)
+Brand Assets
+![alt text](<Screenshot 2025-02-04 145323.png>)
 
 ## Usage and Deployment
 ## **License**
